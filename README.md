@@ -1,12 +1,14 @@
 # Template for running ROS Noetic projects in docker container
 
 # Husky
-[General Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/index.html)
+Links:
+- [General Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/index.html)
+- [GitHub](https://github.com/husky/husky?tab=readme-ov-file)
 
 # Husky Simulator
 [Husky Simulator Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/SimulatingHusky.html)
 
-Simulate Husky in an empty world. You can add new objects to this world using the Gazebo controls (Gazebo Tutorial - Building a World.
+Simulate Husky in an empty world. You can add new objects to this world using the Gazebo controls (Gazebo Tutorial - Building a World).
 ```bash
 roslaunch husky_gazebo empty_world.launch
 ```
@@ -22,12 +24,18 @@ Pick your own world in which to simulate Husky (Using roslaunch with Gazebo).
 roslaunch husky_gazebo husky_playpen.launch
 ```
 
-Using RVIZ (requires not only `ros-husky-simulator` but also `ros-husky-desktop` to be installed)
+Using RVIZ (requires not only `ros-${ROS_DISTRO}-husky-simulator` but also `ros-${ROS_DISTRO}-husky-desktop` to be installed)
 ```bash
 roslaunch husky_viz view_robot.launch
 ```
 
+## Husky Navigation examples
+NB: `ros-${ROS_DISTRO}-husky-navigation` must be installed.
+
+
 ## Customize URDF Husky Robot and Gazebo Simulation
+
+[GitHub](https://github.com/husky/husky_customization)
 
 # Other inputs
 

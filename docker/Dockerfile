@@ -145,7 +145,8 @@ RUN chown -R ${UID}:${GID} /overlay_ws/ /underlay_ws/
 
 RUN apt-get update && apt-get install -y \
   ros-${ROS_DISTRO}-husky-desktop \
-  ros-${ROS_DISTRO}-husky-simulator
+  ros-${ROS_DISTRO}-husky-simulator \
+  ros-${ROS_DISTRO}-husky-navigation
 
 # Set the user and source entrypoint in the user's .bashrc file
 USER ${USERNAME}
