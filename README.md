@@ -1,29 +1,49 @@
 # Template for running ROS Noetic projects in docker container
 
+# Husky
+[General Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/index.html)
 
-# Using this for the first time:
-1. Make a repository based on this template.
-1. Add the submodules to packages folder (and remove placeholder)
-1. Update the overlay and dev dependencied (apt and pip) to suit your project.
-1. Update the `.env` file.
-1. Make sure the entrypoint permissions are set: `chmod +x docker/entrypoint.sh`
-1. Build the image (from this repositorys' root folder)
-1. Start the container.
+# Husky Simulator
+[Husky Simulator Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/SimulatingHusky.html)
 
+Simulate Husky in an empty world. You can add new objects to this world using the Gazebo controls (Gazebo Tutorial - Building a World.
+```bash
+roslaunch husky_gazebo empty_world.launch
+```
 
-NB:
-- In the overlay image the submodules (in packages folder) are copied over (from the Dockerfile)
-- In the dev image the submodules (in packages folder) are a shared volume (from the docker-compose file)
-
-# Files
-- .devcontainer: vscode setup in container
-- Docker: Dockerfile and entrypoint
-- .env: Environment variables to be changed. Particularly important for ROS1 (ros master, nodes IP etc.)
-- dependencies.repos: Repositories that are used, but not to be modified (e.g. drivers, tools etc)
-- docker-compose: Compose file
+Simulate Husky in a Clearpath designed world. This is the base environment for the navigation tutorials. It will take some time to start, as the simulator will need to download resources from the Gazebo servers.
+```bash
+roslaunch husky_gazebo husky_playpen.launch
+```
 
 
-# Docker (How to run docker environment)
+Pick your own world in which to simulate Husky (Using roslaunch with Gazebo).
+```bash
+roslaunch husky_gazebo husky_playpen.launch
+```
+
+Using RVIZ (requires not only `ros-husky-simulator` but also `ros-husky-desktop` to be installed)
+```bash
+roslaunch husky_viz view_robot.launch
+```
+
+## Customize URDF Husky Robot and Gazebo Simulation
+
+# Other inputs
+
+## Control twist commands with keyboard
+
+```bash
+rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+```
+
+## RGB-D camera
+
+
+
+# General information
+
+## Docker (How to run docker environment)
 
 Install docker and docker compose
 
@@ -53,7 +73,7 @@ Remove everything, including stopped containers and all unused images (not just 
 docker system prune -a
 ```
 
-# Submodules
+## Submodules
 Clone the repo with submodules:
 ```bash
 git clone --recursive git@github.com:Lucasmogsan/ros1_template.git
