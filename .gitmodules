@@ -1,0 +1,3 @@
+[submodule "packages/cpr_gazebo"]
+	path = packages/cpr_gazebo
+	url = https://github.com/clearpathrobotics/cpr_gazebo.git
