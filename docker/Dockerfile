@@ -143,11 +143,18 @@ RUN getent group dialout || groupadd --gid 20 dialout \
 RUN chown -R ${UID}:${GID} /overlay_ws/ /underlay_ws/
 
 
+# Husky specific dependencies
 RUN apt-get update && apt-get install -y \
   ros-${ROS_DISTRO}-husky-desktop \
   ros-${ROS_DISTRO}-husky-simulator \
   ros-${ROS_DISTRO}-husky-navigation
 
+# Additional dependencies for Husky
+RUN apt-get update && apt-get install -y \
+  ros-${ROS_DISTRO}-realsense2-camera \
+  ros-${ROS_DISTRO}-realsense2-description \
+  ros-${ROS_DISTRO}-gazebo-plugins
+  
 # Set the user and source entrypoint in the user's .bashrc file
 USER ${USERNAME}
 RUN echo "source /entrypoint.sh" >> /home/${USERNAME}/.bashrc
