@@ -1,4 +1,4 @@
-# Template for running ROS Noetic projects in docker container
+# Clearpath Husky Simulation with Realsense RGB-D Sensor
 
 Remember to:
 - [ ] Get submodules
