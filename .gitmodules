@@ -1,6 +1,3 @@
-[submodule "packages/cpr_gazebo"]
-	path = packages/cpr_gazebo
-	url = https://github.com/clearpathrobotics/cpr_gazebo.git
 [submodule "packages/husky_custom"]
 	path = packages/husky_custom
 	url = git@github.com:Lucasmogsan/husky_custom.git
