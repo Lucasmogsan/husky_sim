@@ -57,7 +57,7 @@ A customized URDF file is created for the sensor.
 
 To add this to the Husky simulation, set the `HUSKY_URDF_EXTRAS` environment variable
 ```bash
-export HUSKY_URDF_EXTRAS=/overlay_ws/src/husky_custom/urdf/realsense.urdf.xacro
+export HUSKY_URDF_EXTRAS=/overlay_ws/src/husky_custom/thesis_custom/urdf/realsense.urdf.xacro
 ```
 
 ### LiDAR 2D scan
@@ -103,7 +103,7 @@ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 ## RViz
 Open rviz with custom configuration file
 ```bash
-rviz -d /overlay_ws/src/husky_custom/rviz/simple_husky_rgbd.rviz
+rviz -d /overlay_ws/src/husky_custom/thesis_custom/rviz/simple_husky_rgbd.rviz
 ```
 
 
@@ -162,4 +162,19 @@ The main repo has references to the submodules. If these submodules are modified
 git submodule update --remote
 ```
 
-This modifies the references in the main repo, and these changes needs to be comitted and pushed.
+This modifies the references in the main repo, and these changes needs to be committed and pushed.
+
+
+Add:
+```bash
+cd packages
+git submodule add git@github.com:Lucasmogsan/husky_custom.git
+```
+maybe with --force
+
+Remove: Go to folder containing 
+```bash
+cd packages
+git rm husky_custom/
+```
+maybe with -f
