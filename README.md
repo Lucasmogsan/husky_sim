@@ -76,6 +76,8 @@ export HUSKY_LMS1XX_ENABLED=1
 roslaunch cpr_office_gazebo office_world.launch platform:=husky
 ```
 
+NB: The [cpr_gazebo](https://github.com/clearpathrobotics/cpr_gazebo) package can be heavy so we've copied only the office world to the husky_custom repository.
+To install all worlds add the [cpr_gazebo](https://github.com/clearpathrobotics/cpr_gazebo) as submodule.
 
 
 
