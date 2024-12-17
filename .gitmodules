@@ -1,3 +1,6 @@
 [submodule "packages/husky_custom"]
 	path = packages/husky_custom
 	url = git@github.com:Lucasmogsan/husky_custom.git
+[submodule "packages/husky-navigation"]
+	path = packages/husky-navigation
+	url = git@github.com:Tran97/husky-navigation.git
