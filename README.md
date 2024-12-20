@@ -6,6 +6,23 @@ Remember to:
 - [ ] Build and source the overlay if it doesn't work (should've already been done in the Dockerfile though)
 - [ ] Have fun
 
+
+
+TODO: How to run it all. both mapping and with map as navigation.
+
+
+
+`./src/husky_custom/launch_office.sh`
+
+`roslaunch husky_navigation_custom amcl_demo_new.launch`
+
+`rosrun teleop_twist_keyboard teleop_twist_keyboard.py`
+
+
+
+
+
+
 # Husky
 Links:
 - [General Clearpath Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/index.html)
