@@ -13,6 +13,11 @@ Links:
 - [General Clearpath Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/index.html)
 - [GitHub](https://github.com/husky/husky?tab=readme-ov-file)
 
+## Husky real robot with ORB_SLAM
+
+1. Disable EKF for IMU and wheels (in `/etc/ros/melodic/ros.d/base.launch`)
+1. export env variable URDF with realsense
+
 # Husky Simulator
 [Husky Simulator Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/SimulatingHusky.html)
 
