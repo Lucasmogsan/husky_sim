@@ -8,21 +8,6 @@ Remember to:
 
 
 
-TODO: How to run it all. both mapping and with map as navigation.
-
-
-
-`./src/husky_custom/launch_office.sh`
-
-`roslaunch husky_navigation_custom amcl_demo_new.launch`
-
-`rosrun teleop_twist_keyboard teleop_twist_keyboard.py`
-
-
-
-
-
-
 # Husky
 Links:
 - [General Clearpath Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/index.html)
@@ -30,6 +15,25 @@ Links:
 
 # Husky Simulator
 [Husky Simulator Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/SimulatingHusky.html)
+
+
+## Husky with ORB-SLAM3
+1. Spin up both husky-sim and orb_slam3_ros containers
+1. launch the environment from husky_sim overlay_ws `./src/husky_custom/launch_office.sh` which also spawns the robot with the sensor (custom urdf).
+1. launch ORB-SLAM from orb_slam3_ros overlay_ws `roslaunch orb_slam3_ros rs_rgbd_sim.launch` without `load_atlas_from_file`
+1. launch keyboard teleoperation of husky from husky_sim overlay_ws `rosrun teleop_twist_keyboard teleop_twist_keyboard.py`
+
+#### Use pre-mapped area for localization and navigation.
+
+Generate map using the `pointcloud_to_grid` package (in orb_slam3_ros overlay_ws) and use this for navigation using `ORB-SLAM` and `husky-navigation`:
+1. Run ORB-SLAM and `pointcloud_to_grid`.
+1. Save 3D ORB map `.osa` from ORB-SLAM.
+1. Save 2D occupancy grid `.pgm` and associating `.yaml` file from `pointcloud_to_grid`.
+1. launch ORB-SLAM from orb_slam3_ros overlay_ws `roslaunch orb_slam3_ros rs_rgbd_sim.launch` with `load_atlas_from_file` pointing to the 3D ORB map `.osa`.
+1. launch navigation from husky_sim overlay_ws `roslaunch husky_navigation_custom amcl_demo_new.launch`
+
+
+## Other simulation environments
 
 Simulate Husky in an empty world. You can add new objects to this world using the Gazebo controls (Gazebo Tutorial - Building a World).
 ```bash
