@@ -13,10 +13,97 @@ Links:
 - [General Clearpath Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/index.html)
 - [GitHub](https://github.com/husky/husky?tab=readme-ov-file)
 
-## Husky real robot with ORB_SLAM
+## Husky real robot
 
+Networking (in this case using a mobile hotspot with IP `172.20.10.1/24`) - inspiration from this [blogpost](https://chantrapornchai.medium.com/tips-in-setting-ros-networking-3d8ed0a2e43f):
+1. Connect Husky to network and set the connection priority to the lowest (to make sure it connects to the one intended)
+1. Check the Husky IP (e.g. `ifconfig`): In this example it has inet / IP address `172.20.10.2`.
+1. Set up the ROS network configurations as below:
+    On Robot PC:
+    ```bash
+    $ export ROS_IP=ip_of_this_machine
+    $ export ROS_MASTER_URI=http://ip_of_this_machine:11311
+    ```
+    On remote PC:
+    ```bash
+    $ export ROS_IP=ip_of_this_machine
+    $ export ROS_MASTER_URI=http://ip_of_master:11311
+    ```
+1. This is done by: Modifying `/etc/ros/setup.bash` on Husky: Add `export ROS_MASTER_URI=http://172.20.10.2:11311` and `export ROS_IP=172.20.10.2`
+1. Connect remote PC (in this example with IP `172.20.10.3`) to same network and do:
+    ```bash
+    export ROS_MASTER_URI=http://172.20.10.2:11311
+    export ROS_IP=172.20.10.3
+    ```
+1. Verify by running `rostopic list` on remote pc and `rostopic echo` some topic like `/husky_velocity_controller/cmd_vel`
+1. if firewall is blocking the connection disable it `ufw disable`
+
+In case the topics can be seen but not read (no output when using rostopic echo), the Husky ros nodes likely use a hostname for publishing.
+1. See hostname used for Husky nodes:
+    ```bash
+    rosnode info <node-names>
+    ```
+1. Add the hostname to the remote PCs hostnames in `/etc/hosts`. In the husky example it should resolve the hostname `cpr-a200-0632` to its correct IP (`172.20.10.2`).
+    ```bash
+    172.20.10.2 cpr-a200-0632
+    ```
+
+### Husky w. ORB_SLAM
+
+Setup on Husky (if not already done) - recommended to be done with screen, mouse, and keyboard:
 1. Disable EKF for IMU and wheels (in `/etc/ros/melodic/ros.d/base.launch`)
-1. export env variable URDF with realsense
+1. Export URDF file with correct placement of realsense to `HUSKY_URDF_EXTRAS` variable (this is done by modifying `/etc/ros/setup.bash` which is being run by `/usr/sbin/ros-start` script)
+1. If URDF is changed (or added) restart ROS by `sudo systemctl restart ros`
+1. Clone `orb_slam3_ros`, `realsense_ros`, and `pointcloud_to_grid` repositories to the home directory
+1. Pull the docker images from dockerhub (`lucasmogsan/orbslam3_ros` and `lucasmogsan/realsense_ros1`) 
+1. Connect to a common network which can be used by remote PC as well.
+
+Start Husky with ORB-SLAM:
+1. Boot up the Husky (automatically starts ROS and the Husky drivers)
+1. (ssh onto the Husky from remote PC - find the IP by getting on same wifi and use nmap e.g. `nmap -sn 172.20.10.0/24`)
+1. (spin up container with ROS1 on remote pc and very same ROS_MASTER - Husky ROS_IP is set in `etc/ros/setup.bash`)
+1. Spin up docker containers for `orb_slam3_ros` and `realsense_ros` by `docker compose up dev` from their respective directories.
+1. Launch the realsense node `roslaunch realsense2_camera rs_camera.launch`
+1. Start ORB-SLAM `roslaunch orb_slam3_ros rs_rgbd.launch`
+
+Save ORB-SLAM trajectory:
+
+
+### Husky w. realsense recording to bag
+
+Setup on Husky (if not done already):
+1. Clone `realsense_ros` repository to the home directory
+1. Pull the docker image from dockerhub (`lucasmogsan/realsense_ros1`)
+
+Record ros-bag with realsense camera:
+1. Boot up Husky
+1. Spin up docker container with ROS on remote PC
+1. ssh onto Husky from remote PC
+1. Spin up docker container `realsense_ros` from its directory
+    ```bash
+    cd realsense_ros1_docker/
+    docker compose up dev
+    ```
+    In another terminal
+    ```bash
+    docker exec -it realsense_ros1_docker-dev-1 bash
+    roslaunch realsense2_camera rs_camera.launch
+    ```
+1. Launch the realsense node `roslaunch realsense2_camera rs_camera.launch`
+1. View from remote pc
+    ```bash
+    rqt
+1. record rosbag from remote pc
+    Specific topic (preferred)
+    ```bash
+    rosbag record <topic-names>
+    rosbag record /camera/depth/image_rect_raw
+    ```
+    All topics (Note that newly published topics are discovered by periodically polling the master. rosbag record -a will likely miss initial messages published on any topic.)
+    ```bash
+    rosbag record -a
+    ```
+
 
 # Husky Simulator
 [Husky Simulator Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/SimulatingHusky.html)
