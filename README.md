@@ -111,18 +111,57 @@ Record ros-bag with realsense camera:
 
 ## Husky with ORB-SLAM3
 1. Spin up both husky-sim and orb_slam3_ros containers
-1. launch the environment from husky_sim overlay_ws `./src/husky_custom/launch_office.sh` which also spawns the robot with the sensor (custom urdf).
-1. launch ORB-SLAM from orb_slam3_ros overlay_ws `roslaunch orb_slam3_ros rs_rgbd_sim.launch` without `load_atlas_from_file`
-1. launch keyboard teleoperation of husky from husky_sim overlay_ws `rosrun teleop_twist_keyboard teleop_twist_keyboard.py`
+    ```bash
+    cd <folders>
+    docker compose up dev
+    ```
+1. launch the environment from husky_sim overlay_ws which also spawns the robot with the sensor (custom urdf).
+    ```bash
+    ./src/husky_custom/launch_office.sh
+    ```
+1. launch ORB-SLAM from orb_slam3_ros overlay_ws without any pre-defined map.
+    ```bash
+    roslaunch orb_slam3_ros rs_rgbd_sim.launch load_atlas:=false
+    ```
+1. launch keyboard teleoperation of husky from husky_sim overlay_ws
+    ```bash
+    rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+    ```
+
+#### Generate and save ORB map and occupancy grid
+
+Generate map using the `pointcloud_to_grid` package (in orb_slam3_ros overlay_ws) and use this for navigation using `ORB-SLAM` and `husky-navigation`:
+1. launch pointcloud to grid from orb_slam3_ros overlay_ws.
+    ```bash
+    roslaunch pointcloud_to_grid create_occupancy_grid.launch
+    ```
+1. Save 3D ORB map `.osa` from ORB-SLAM (saves in the `ROS_HOME` folder (`~/.ros/` by default)).
+    ```bash
+    rosservice call /orb_slam3/save_map orbmap_construction_site
+    ```
+    1. Alternatively save by the following to save to the orb_slam3_ros folder which is mounted from your PC.
+        ```bash
+        rosservice call /orb_slam3/save_map ./../../../overlay_ws/src/orb_slam3_ros/maps/orbmap_construction_site
+        ```
+1. Save 2D occupancy grid from the dynamic `pointcloud_to_grid` reconfigure application.
+    1. Specify path (from within the container, `/overlay_ws/src/orb_slam3_ros/maps/` is default), name (`orbmap_construction_site` is default) and click save in the reconfigure application.
+    1. It saves a `.pgm` and associating `.yaml` file.
 
 #### Use pre-mapped area for localization and navigation.
 
-Generate map using the `pointcloud_to_grid` package (in orb_slam3_ros overlay_ws) and use this for navigation using `ORB-SLAM` and `husky-navigation`:
-1. Run ORB-SLAM and `pointcloud_to_grid`.
-1. Save 3D ORB map `.osa` from ORB-SLAM.
-1. Save 2D occupancy grid `.pgm` and associating `.yaml` file from `pointcloud_to_grid`.
-1. launch ORB-SLAM from orb_slam3_ros overlay_ws `roslaunch orb_slam3_ros rs_rgbd_sim.launch` with `load_atlas_from_file` pointing to the 3D ORB map `.osa`.
-1. launch navigation from husky_sim overlay_ws `roslaunch husky_navigation_custom amcl_demo_new.launch`
+1. Make sure the occupancy `.pgm` and `.yaml` files are in `husky_navigation_custom/maps` and `amcl_husky.launch` includes correct path and file-name.
+1. Make sure the ORB map is located in `orb_slam3_ros/maps` and `rs_rgbd_sim.launch` includes correct path and file-name.
+
+1. launch ORB-SLAM from orb_slam3_ros overlay_ws with `load_atlas_from_file` pointing to the 3D ORB map `.osa`.
+    ```bash
+    roslaunch orb_slam3_ros rs_rgbd_sim.launch load_atlas:=true
+    ```
+    1.  ! Remember to specify the correct path to the map in the launch file.
+
+1. launch navigation from husky_sim overlay_ws
+    ```bash
+    roslaunch husky_navigation_custom amcl_husky.launch
+    ```
 
 
 ## Other simulation environments
