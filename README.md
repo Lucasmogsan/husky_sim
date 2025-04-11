@@ -63,7 +63,11 @@ Start Husky with ORB-SLAM:
 1. (ssh onto the Husky from remote PC - find the IP by getting on same wifi and use nmap e.g. `nmap -sn 172.20.10.0/24`)
 1. (spin up container with ROS1 on remote pc and very same ROS_MASTER - Husky ROS_IP is set in `etc/ros/setup.bash`)
 1. Spin up docker containers for `orb_slam3_ros` and `realsense_ros` by `docker compose up dev` from their respective directories.
-1. Launch the realsense node `roslaunch realsense2_camera rs_camera.launch`
+1. Launch the realsense node with specified parameters `roslaunch realsense2_camera rs_camera.launch color_width:=1280 color_height:=720 color_fps:=30 depth_width:=1280 depth_height:=720 depth_fps:=30 align_depth:=true`
+    1. NB: USB must be USB 3.0 (blue) to account for the fast data-transfer.
+    1. 640x480 resolution is launched by default `roslaunch realsense2_camera rs_camera.launch`
+        1. NB: If using other resolution remember to change intrinsics in the config file `orb_slam3_ros/config/RGB-D/RealSense_D455.yaml`.
+        1. The camera params can be read from topic `/camera/color/camera_info`.
 1. Start ORB-SLAM `roslaunch orb_slam3_ros rs_rgbd.launch`
 
 Save ORB-SLAM trajectory:
