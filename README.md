@@ -1,8 +1,8 @@
 # Clearpath Husky Simulation with Realsense RGB-D Sensor
 
 Remember to:
-- [ ] Get submodules
 - [ ] Read documentation
+- [ ] Get submodules and other repositories
 - [ ] Build and source the overlay if it doesn't work (should've already been done in the Dockerfile though)
 - [ ] Have fun
 
@@ -12,6 +12,11 @@ Remember to:
 Links:
 - [General Clearpath Documentation](https://www.clearpathrobotics.com/assets/guides/noetic/husky/index.html)
 - [GitHub](https://github.com/husky/husky?tab=readme-ov-file)
+
+Other repositories used in this project:
+- [orb_slam3_ros](https://github.com/Tran97/orb_slam3_ros_docker)
+- [realsense_ros](https://github.com/Lucasmogsan/realsense_ros1_docker)
+- [pointcloud_to_grid](https://github.com/Lucasmogsan/pointcloud_to_grid)
 
 ## Husky real robot
 
